@@ -8,30 +8,42 @@ namespace BGGames_Test
 {
     public class Player : MonoBehaviour
     {
+        #region Fields
+
         [SerializeField] private GameObject _playerObject;
         [SerializeField] private ParticleSystem _explosion;
         [SerializeField] private ParticleSystem _confetti;
         [SerializeField] private Color _regularColor;
         [SerializeField] private Color _invincibleColor;
 
-        private Rigidbody _rigidbody;
         private NavMeshAgent _navMeshAgent;
         private MeshRenderer _meshRenderer;
 
         public event Action Finished;
         public event Action Damaged;
 
-        public Transform Transform => transform;
-        public Rigidbody RigidBody => _rigidbody;
+        #endregion
+
+
+        #region Properties
+
         public NavMeshAgent NavMeshAgent => _navMeshAgent;
 
+        #endregion
+
+
+        #region UnityMethods
 
         void Awake()
         {
-            _rigidbody = GetComponent<Rigidbody>();
             _navMeshAgent = GetComponent<NavMeshAgent>();
             _meshRenderer = GetComponentInChildren<MeshRenderer>();
         }
+
+        #endregion
+
+
+        #region Methods
 
         public void ShowPlayer()
         {
@@ -76,5 +88,7 @@ namespace BGGames_Test
             else
                 _meshRenderer.material.color = _regularColor;
         }
+
+        #endregion
     }
 }

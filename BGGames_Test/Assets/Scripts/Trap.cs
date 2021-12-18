@@ -4,6 +4,8 @@ namespace BGGames_Test
 {
     public class Trap : MonoBehaviour
     {
+        #region UnityMethods
+
         private void OnTriggerStay(Collider other)
         {
             var player = other.GetComponentInParent<Player>();
@@ -11,5 +13,7 @@ namespace BGGames_Test
             if (player)
                 player.GetDamaged();
         }
+
+        #endregion
     }
 }

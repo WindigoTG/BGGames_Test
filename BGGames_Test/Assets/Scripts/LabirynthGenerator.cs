@@ -4,6 +4,8 @@ namespace BGGames_Test
 {
     public class LabirynthGenerator
     {
+        #region Fields
+
         private Labirynth _labirynth;
         private LabirynthDataGenerator _dataGenerator;
 
@@ -19,6 +21,11 @@ namespace BGGames_Test
         private static string FINISH_PATH = "Finish";
         private static string TRAP_PATH = "Trap";
 
+        #endregion
+
+
+        #region ClassLifeCycles
+
         public LabirynthGenerator(Labirynth labirynth)
         {
             _labirynth = labirynth;
@@ -27,6 +34,11 @@ namespace BGGames_Test
 
             LoadPrefabs();
         }
+
+        #endregion
+
+
+        #region Methods
 
         private void LoadPrefabs()
         {
@@ -95,5 +107,7 @@ namespace BGGames_Test
                 _traps[i].transform.position = _labirynth.GetCellPosition(position);
             }
         }
+
+        #endregion
     }
 }

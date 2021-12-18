@@ -7,6 +7,8 @@ namespace BGGames_Test
 {
     public class PlayerController : IUpdateableRegular
     {
+        #region Fields
+
         private Player _player;
         private Labirynth _labirynth;
         private ShieldButton _shieldButton;
@@ -22,6 +24,11 @@ namespace BGGames_Test
         bool _isDead;
         private const float RESPAWN_COOLDOWN = 1.0f;
         private float _currentRespawnCooldown;
+
+        #endregion
+
+
+        #region ClassLifeCycles
 
         public PlayerController(Labirynth labirynth, ShieldButton shieldButton)
         {
@@ -39,6 +46,11 @@ namespace BGGames_Test
             _shieldButton.ButtonPressed += EnableShield;
             _shieldButton.ButtonReleased += DisableShield;
         }
+
+        #endregion
+
+
+        #region Methods
 
         public void RegularUpdate()
         {
@@ -110,5 +122,7 @@ namespace BGGames_Test
             _isShielded = false;
             _player.SwitchColor(false);
         }
+
+        #endregion
     }
 }

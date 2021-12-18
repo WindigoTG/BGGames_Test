@@ -6,6 +6,8 @@ namespace BGGames_Test
 {
     public class GameController : MonoBehaviour
     {
+        #region Fields
+
         [SerializeField] private Labirynth _labirynth;
         [SerializeField] private ShieldButton _shieldButton;
         [SerializeField] private Image _darkScreen;
@@ -14,6 +16,11 @@ namespace BGGames_Test
         private PlayerController _playerController;
 
         private float _fadeCounter = 0;
+
+        #endregion
+
+
+        #region UnityMethods
 
         void Start()
         {
@@ -32,6 +39,11 @@ namespace BGGames_Test
         {
             _playerController.RegularUpdate();
         }
+
+        #endregion
+
+
+        #region Methods
 
         private void Restart()
         {
@@ -74,5 +86,7 @@ namespace BGGames_Test
             yield return new WaitForSeconds(2f);
             _playerController.Start();
         }
+
+        #endregion
     }
 }

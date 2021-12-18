@@ -6,8 +6,15 @@ namespace BGGames_Test
 {
     public class ShieldButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
+        #region Events
+
         public event Action ButtonPressed;
         public event Action ButtonReleased;
+
+        #endregion
+
+
+        #region Methods
 
         public void OnPointerDown(PointerEventData eventData)
         {
@@ -18,5 +25,7 @@ namespace BGGames_Test
         {
             ButtonReleased?.Invoke();
         }
+
+        #endregion
     }
 }

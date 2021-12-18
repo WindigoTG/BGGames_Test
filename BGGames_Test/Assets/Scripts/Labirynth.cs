@@ -1,16 +1,26 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace BGGames_Test
 {
     public class Labirynth : MonoBehaviour
     {
+        #region Fields
+
         [SerializeField] private LabirynthSettings _settings;
 
         private Grid _grid;
 
+        #endregion
+
+
+        #region Properties
+
         public LabirynthSettings Settings => _settings;
+
+        #endregion
+
+
+        #region UnityMethods
 
         void Awake()
         {
@@ -22,24 +32,10 @@ namespace BGGames_Test
 
         }
 
-        private void OnDrawGizmos()
-        {
-            Gizmos.color = Color.white;
+        #endregion
 
-            for (int x = 0; x < _settings.Size; ++x)
-            {
-                Gizmos.DrawLine(Vector3.right * x, Vector3.right * x + _settings.Size * Vector3.forward);
-            }
 
-            Gizmos.DrawLine(Vector3.right * _settings.Size, Vector3.right * _settings.Size + _settings.Size * Vector3.forward);
-
-            for (int y = 0; y < _settings.Size; ++y)
-            {
-                Gizmos.DrawLine(Vector3.forward * y, Vector3.forward * y + Vector3.right * _settings.Size);
-            }
-
-            Gizmos.DrawLine(Vector3.forward * _settings.Size, Vector3.forward * _settings.Size + Vector3.right * _settings.Size);
-        }
+        #region Methods
 
         public Vector3 GetCellPosition((int x, int z) cellIndex)
         {
@@ -47,5 +43,7 @@ namespace BGGames_Test
 
             return _grid.CellToWorld(position); 
         }
+
+        #endregion
     }
 }

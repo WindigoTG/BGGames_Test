@@ -4,12 +4,24 @@ namespace BGGames_Test
 {
     public class LabirynthDataGenerator
     {
+        #region Fields
+
         private LabirynthSettings _labirinthSettings;
+
+        #endregion
+
+
+        #region ClassLifeCycles
 
         public LabirynthDataGenerator(LabirynthSettings labirynthSettings)
         {
             _labirinthSettings = labirynthSettings;
         }
+
+        #endregion
+
+
+        #region Methods
 
         public int[,] GenerateData()
         {
@@ -44,5 +56,7 @@ namespace BGGames_Test
 
             return labirynth;
         }
+
+        #endregion
     }
 }

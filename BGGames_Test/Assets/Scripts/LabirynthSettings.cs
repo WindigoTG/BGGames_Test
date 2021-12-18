@@ -7,6 +7,8 @@ namespace BGGames_Test
     [Serializable]
     public class LabirynthSettings
     {
+        #region Fields
+
         [SerializeField] private int _size;
         [SerializeField, Range(0.1f, 0.5f)] private float _emptySpaceTreshold = 0.1f;
         [SerializeField] float _corridorWidth = 1f;
@@ -14,11 +16,18 @@ namespace BGGames_Test
         [SerializeField] private Material _labirynthMaterial;
         [SerializeField, Min(0)] int _numberOfTraps;
 
+        #endregion
+
+
+        #region Properties
+
         public int Size => _size;
         public float EmptySpaceTreshold => _emptySpaceTreshold;
         public float CorridorWidth => _corridorWidth;
         public float WallHeight => _wallHeight;
         public Material Material => _labirynthMaterial;
         public int NumberOfTraps => _numberOfTraps;
+
+        #endregion
     }
 }
