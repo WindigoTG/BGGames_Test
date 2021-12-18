@@ -9,8 +9,15 @@ namespace BGGames_Test
 
         private int[,] _labirynthData;
         private GameObject _wallPrefab;
+        private GameObject _trapPrefab;
+
+        private GameObject _finish;
+        private GameObject _walls;
+        private GameObject[] _traps;
 
         private static string WALL_PATH = "Wall";
+        private static string FINISH_PATH = "Finish";
+        private static string TRAP_PATH = "Trap";
 
         public LabirynthGenerator(Labirynth labirynth)
         {
@@ -18,7 +25,19 @@ namespace BGGames_Test
 
             _dataGenerator = new LabirynthDataGenerator(_labirynth.Settings);
 
+            LoadPrefabs();
+        }
+
+        private void LoadPrefabs()
+        {
             _wallPrefab = Resources.Load<GameObject>(WALL_PATH);
+            _finish = Object.Instantiate(Resources.Load<GameObject>(FINISH_PATH));
+
+            _traps = new GameObject[_labirynth.Settings.NumberOfTraps];
+            _trapPrefab = Resources.Load<GameObject>(TRAP_PATH);
+
+            for (int i = 0; i < _labirynth.Settings.NumberOfTraps; i++)
+                _traps[i] = Object.Instantiate(_trapPrefab);
         }
 
         public void GenerateLabirynth()
@@ -26,10 +45,17 @@ namespace BGGames_Test
             _labirynthData = _dataGenerator.GenerateData();
 
             GenerateWalls();
+
+            PlaceTraps();
+
+            _finish.transform.position = _labirynth.GetCellPosition((_labirynth.Settings.Size - 2, _labirynth.Settings.Size - 2));
         }
 
         private void GenerateWalls()
         {
+            if (_walls)
+                Object.Destroy(_walls);
+
             GameObject go = new GameObject("LabirinthWalls");
             go.transform.position = Vector3.zero;
 
@@ -49,6 +75,24 @@ namespace BGGames_Test
             }
 
             go.transform.SetParent(_labirynth.transform);
+
+            _walls = go;
+        }
+
+        private void PlaceTraps()
+        {
+            for (int i = 0; i < _labirynth.Settings.NumberOfTraps; i++)
+            {
+                (int x, int z) potition;
+
+                do
+                {
+                    potition.x = Random.Range(1, _labirynth.Settings.Size - 1);
+                    potition.z = Random.Range(1, _labirynth.Settings.Size - 1);
+                } while (_labirynthData[potition.x, potition.z] != 0);
+
+                _traps[i].transform.position = _labirynth.GetCellPosition(potition);
+            }
         }
     }
 }

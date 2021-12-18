@@ -1,29 +1,68 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
+using UnityEngine.AI;
 
 namespace BGGames_Test
 {
-    public class Player
+    public class Player : MonoBehaviour
     {
-        private PlayerView _view;
+        [SerializeField] private GameObject _playerObject;
+        [SerializeField] private ParticleSystem _explosion;
+        [SerializeField] private ParticleSystem _confetti;
 
-        public Player()
+        private Rigidbody _rigidbody;
+        private NavMeshAgent _navMeshAgent;
+
+        public event Action Finished;
+        public event Action Damaged;
+
+        public Transform Transform => transform;
+        public Rigidbody RigidBody => _rigidbody;
+        public NavMeshAgent NavMeshAgent => _navMeshAgent;
+
+
+        void Awake()
         {
-            var playerView = Object.Instantiate(Resources.LoadAll<PlayerView>("")[0].gameObject);
-            _view = playerView.GetComponent<PlayerView>();
-            _view.HidePlayer();
+            _rigidbody = GetComponent<Rigidbody>();
+            _navMeshAgent = GetComponent<NavMeshAgent>();
         }
 
-        public void SetPosition(Vector3 position) => _view.RigidBody.position = position;
-
-        public void Hide() => _view.HidePlayer();
-
-        public void Show() => _view.ShowPlayer();
-
-        public void StartMovingToPoint(Vector3 targetPoint)
+        public void ShowPlayer()
         {
-            _view.NavMeshAgent.SetDestination(targetPoint);
+            _playerObject.SetActive(true); 
+        }
+
+        public void HidePlayer()
+        {
+            _navMeshAgent.ResetPath();
+            _playerObject.SetActive(false);
+            _explosion.gameObject.SetActive(false);
+            _confetti.gameObject.SetActive(false);
+        }
+
+        public void Celebrate()
+        {
+            _confetti.gameObject.SetActive(true);
+            _confetti.Play();
+        }
+
+        public void Death()
+        {
+            _playerObject.SetActive(false);
+            _explosion.gameObject.SetActive(true);
+            _explosion.Play();
+        }
+
+        public void TriggerFinish()
+        {
+            Finished?.Invoke();
+        }
+
+        public void GetDamaged()
+        {
+            Damaged?.Invoke();
         }
     }
 }

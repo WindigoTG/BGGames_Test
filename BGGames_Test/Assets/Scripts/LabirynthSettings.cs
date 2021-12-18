@@ -12,11 +12,13 @@ namespace BGGames_Test
         [SerializeField] float _corridorWidth = 1f;
         [SerializeField] float _wallHeight = 1f;
         [SerializeField] private Material _labirynthMaterial;
+        [SerializeField, Min(0)] int _numberOfTraps;
 
         public int Size => _size;
         public float EmptySpaceTreshold => _emptySpaceTreshold;
         public float CorridorWidth => _corridorWidth;
         public float WallHeight => _wallHeight;
         public Material Material => _labirynthMaterial;
+        public int NumberOfTraps => _numberOfTraps;
     }
 }
