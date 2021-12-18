@@ -6,34 +6,47 @@ namespace BGGames_Test
     {
         private Labirynth _labirynth;
         private LabirynthDataGenerator _dataGenerator;
-        private LabirynthMeshGenerator _meshGenerator;
 
         private int[,] _labirynthData;
+        private GameObject _wallPrefab;
+
+        private static string WALL_PATH = "Wall";
 
         public LabirynthGenerator(Labirynth labirynth)
         {
             _labirynth = labirynth;
 
             _dataGenerator = new LabirynthDataGenerator(_labirynth.Settings);
-            _meshGenerator = new LabirynthMeshGenerator(_labirynth.Settings);
+
+            _wallPrefab = Resources.Load<GameObject>(WALL_PATH);
         }
 
         public void GenerateLabirynth()
         {
             _labirynthData = _dataGenerator.GenerateData();
 
-            GameObject go = new GameObject();
+            GenerateWalls();
+        }
+
+        private void GenerateWalls()
+        {
+            GameObject go = new GameObject("LabirinthWalls");
             go.transform.position = Vector3.zero;
-            go.name = "LabirinthWalls";
 
-            MeshFilter mf = go.AddComponent<MeshFilter>();
-            mf.mesh = _meshGenerator.GenerateMeshFromData(_labirynthData);
+            for (int i = 0; i < _labirynth.Settings.Size; i++)
+            {
+                for (int j = 0; j < _labirynth.Settings.Size; j++)
+                {
+                    if (_labirynthData[i,j] == 1)
+                    {
+                        GameObject wall = Object.Instantiate(_wallPrefab);
 
-            MeshCollider mc = go.AddComponent<MeshCollider>();
-            mc.sharedMesh = mf.mesh;
+                        wall.transform.position = _labirynth.GetCellPosition((i, j));
 
-            MeshRenderer mr = go.AddComponent<MeshRenderer>();
-            mr.materials = new Material[1] { _labirynth.Settings.Material };
+                        wall.transform.SetParent(go.transform);
+                    }
+                }
+            }
 
             go.transform.SetParent(_labirynth.transform);
         }

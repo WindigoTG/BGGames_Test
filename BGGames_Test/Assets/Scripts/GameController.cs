@@ -9,18 +9,18 @@ namespace BGGames_Test
         [SerializeField] private Labirynth _labirynth;
 
         private LabirynthGenerator _labirinthGenerator;
-
-        public Transform object1;
-        public Transform object2;
+        private PlayerController _playerController;
 
         // Start is called before the first frame update
         void Start()
         {
+            _playerController = new PlayerController(_labirynth);
             _labirinthGenerator = new LabirynthGenerator(_labirynth);
-            _labirinthGenerator.GenerateLabirynth();
 
-            object1.position = _labirynth.GetCellPosition((1, 1));
-            object2.position = _labirynth.GetCellPosition((_labirynth.Settings.Size-2, _labirynth.Settings.Size -2));
+            _labirinthGenerator.GenerateLabirynth();
+            _playerController.ResetPlayer();
+
+            _playerController.Start();
         }
 
         // Update is called once per frame
