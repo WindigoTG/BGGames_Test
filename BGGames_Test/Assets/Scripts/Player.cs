@@ -11,9 +11,12 @@ namespace BGGames_Test
         [SerializeField] private GameObject _playerObject;
         [SerializeField] private ParticleSystem _explosion;
         [SerializeField] private ParticleSystem _confetti;
+        [SerializeField] private Color _regularColor;
+        [SerializeField] private Color _invincibleColor;
 
         private Rigidbody _rigidbody;
         private NavMeshAgent _navMeshAgent;
+        private MeshRenderer _meshRenderer;
 
         public event Action Finished;
         public event Action Damaged;
@@ -27,6 +30,7 @@ namespace BGGames_Test
         {
             _rigidbody = GetComponent<Rigidbody>();
             _navMeshAgent = GetComponent<NavMeshAgent>();
+            _meshRenderer = GetComponentInChildren<MeshRenderer>();
         }
 
         public void ShowPlayer()
@@ -63,6 +67,14 @@ namespace BGGames_Test
         public void GetDamaged()
         {
             Damaged?.Invoke();
+        }
+
+        public void SwitchColor(bool isInvincible)
+        {
+            if (isInvincible)
+                _meshRenderer.material.color = _invincibleColor;
+            else
+                _meshRenderer.material.color = _regularColor;
         }
     }
 }

@@ -5,16 +5,25 @@ using UnityEngine;
 
 namespace BGGames_Test
 {
-    public class PlayerController
+    public class PlayerController : IUpdateableRegular
     {
         private Player _player;
         private Labirynth _labirynth;
+        private ShieldButton _shieldButton;
 
-        public event Action MovementIsOver;
+        public event Action Finished;
 
         bool _isActive;
 
-        public PlayerController(Labirynth labirynth)
+        bool _isShielded;
+        private const float SHIELD_TIME = 2.0f;
+        private float _remainingShieldTime;
+
+        bool _isDead;
+        private const float RESPAWN_COOLDOWN = 1.0f;
+        private float _currentRespawnCooldown;
+
+        public PlayerController(Labirynth labirynth, ShieldButton shieldButton)
         {
             var playerView = UnityEngine.Object.Instantiate(Resources.LoadAll<Player>("")[0].gameObject);
             _player = playerView.GetComponent<Player>();
@@ -24,6 +33,33 @@ namespace BGGames_Test
             _player.Damaged += GetDamage;
 
             _labirynth = labirynth;
+
+            _shieldButton = shieldButton;
+
+            _shieldButton.ButtonPressed += EnableShield;
+            _shieldButton.ButtonReleased += DisableShield;
+        }
+
+        public void RegularUpdate()
+        {
+            if (_isShielded)
+            {
+                if (_remainingShieldTime > 0)
+                    _remainingShieldTime -= Time.deltaTime;
+                else
+                    DisableShield();
+            }
+
+            if (_isDead)
+            {
+                if (_currentRespawnCooldown > 0)
+                    _currentRespawnCooldown -= Time.deltaTime;
+                else
+                {
+                    ResetPlayer();
+                    Start();
+                }
+            }
         }
 
         public void ResetPlayer()
@@ -31,6 +67,7 @@ namespace BGGames_Test
             _player.HidePlayer();
             _player.NavMeshAgent.Warp(_labirynth.GetCellPosition((1, 1)));
             _player.ShowPlayer();
+            _isDead = false;
         }
 
         public void Start()
@@ -46,18 +83,32 @@ namespace BGGames_Test
             {
                 _isActive = false;
                 _player.Celebrate();
-                MovementIsOver?.Invoke();
+                Finished?.Invoke();
             }
         }
 
         private void GetDamage()
         {
-            if (_isActive)
+            if (_isActive && !_isShielded)
             {
                 _isActive = false;
                 _player.Death();
-                MovementIsOver?.Invoke();
+                _isDead = true;
+                _currentRespawnCooldown = RESPAWN_COOLDOWN;
             }
+        }
+
+        private void EnableShield()
+        {
+            _isShielded = true;
+            _remainingShieldTime = SHIELD_TIME;
+            _player.SwitchColor(true);
+        }
+
+        private void DisableShield()
+        {
+            _isShielded = false;
+            _player.SwitchColor(false);
         }
     }
 }

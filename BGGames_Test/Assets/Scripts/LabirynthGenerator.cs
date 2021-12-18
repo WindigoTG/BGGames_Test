@@ -83,15 +83,16 @@ namespace BGGames_Test
         {
             for (int i = 0; i < _labirynth.Settings.NumberOfTraps; i++)
             {
-                (int x, int z) potition;
+                (int x, int z) position;
 
                 do
                 {
-                    potition.x = Random.Range(1, _labirynth.Settings.Size - 1);
-                    potition.z = Random.Range(1, _labirynth.Settings.Size - 1);
-                } while (_labirynthData[potition.x, potition.z] != 0);
+                    position.x = Random.Range(1, _labirynth.Settings.Size - 1);
+                    position.z = Random.Range(1, _labirynth.Settings.Size - 1);
+                } while (_labirynthData[position.x, position.z] != 0 || position == (1,1) ||
+                        position == (_labirynth.Settings.Size - 2, _labirynth.Settings.Size - 2));
 
-                _traps[i].transform.position = _labirynth.GetCellPosition(potition);
+                _traps[i].transform.position = _labirynth.GetCellPosition(position);
             }
         }
     }
